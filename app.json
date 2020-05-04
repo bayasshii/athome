@@ -1,15 +1,23 @@
 {
-  "name": "MyProject",
-  "displayName": "MyProject",
+  "name": "athome",
+  "displayName": "athome",
   "expo": {
-    "name": "MyProject",
-    "slug": "MyProject",
+    "name": "athome",
+    "slug": "athome",
     "version": "1.0.0",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
+    "ios": {
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
+      }
+    },
     "assetBundlePatterns": [
       "**/*"
     ]
