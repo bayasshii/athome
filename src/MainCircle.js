@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { CircleBox } from './styled-components/CircleBox.js'
+import { CircleBox, CircleBoxText } from './styled-components/CircleBox.js'
 import styled from 'styled-components/native'
 
 const TopText = styled.Text`
-  font-size: 36px;
+  font-size: 28px;
   font-weight: 800;
-  color: #3DA55C;
+  color: #7092E7;
   justify-content: center;
   text-align: center;
 `
@@ -21,8 +21,8 @@ const BottomText = styled.Text`
   justify-content: center;
 `
 const BottomTextBold = styled.Text`
-  color: #3DA55C;
-  font-size: 60px;
+  color: #7092E7;
+  font-size: 80px;
   font-weight: 800;
 `
 
@@ -31,7 +31,7 @@ export default class MainCircle extends React.Component {
     return (
       <>
       <CircleBox>
-        <Text style={styles.circleBox__text}>おうちなう</Text>
+        <CircleBoxText>おうちなう</CircleBoxText>
       </CircleBox>
       <View style={{ paddingTop: 50 }}>
         <TopText>おうちじかん</TopText>
@@ -44,12 +44,3 @@ export default class MainCircle extends React.Component {
     )
   }
 }
-
-
-const styles = StyleSheet.create({
-  circleBox__text: {
-    fontSize: 36,
-    fontWeight: '800',
-    color: '#3DA55C',
-  }
-});

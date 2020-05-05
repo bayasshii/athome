@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Button} from 'react-native';
-import { CircleBox } from './styled-components/CircleBox.js'
+import { CircleBox, CircleBoxButton } from './styled-components/CircleBox.js'
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions'
 
@@ -30,9 +30,9 @@ export default class HomeLocation extends React.Component {
       isLocationPermitted: await this._confirmLocationPermission()
     })
 
-    const homeLocation = await Location.getCurrentPositionAsync({});
+    const homeLocation = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest});
     const homeLatitude = JSON.stringify(homeLocation.coords.latitude)
-    const homeLongitude = JSON.stringify(homeLocation.coords.longitudee)
+    const homeLongitude = JSON.stringify(homeLocation.coords.longitude)
     this.setState({
       homeLatitude: homeLatitude,
       homeLongitude: homeLongitude,
@@ -46,6 +46,8 @@ export default class HomeLocation extends React.Component {
         [latitude, longitude]
       );
     });
+    console.log("緯度/"+String(latitude))
+    console.log("経度/"+String(longitude))
   }
 
   _registerHomeLocation = () => {
@@ -62,9 +64,8 @@ export default class HomeLocation extends React.Component {
     return (
       <>
         <CircleBox>
-          <Button
+          <CircleBoxButton
             title="自宅を登録してね"
-            style={styles.circleBox__text}
             onPress={this._registerHomeLocation}
           />
         </CircleBox>
@@ -72,12 +73,3 @@ export default class HomeLocation extends React.Component {
     )
   }
 }
-
-
-const styles = StyleSheet.create({
-  circleBox__text: {
-    fontSize: 36,
-    fontWeight: '800',
-    color: '#3DA55C',
-  }
-});

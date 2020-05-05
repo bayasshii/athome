@@ -1,14 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, StatusBar, ScrollView} from 'react-native';
+import { StyleSheet, View, Button, StatusBar} from 'react-native';
 import * as BackgroundFetch from "expo-background-fetch";
 import * as TaskManager from "expo-task-manager";
 import * as SQLite from 'expo-sqlite';
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions'
 import HomeLocation from './src/HomeLocation'
 import MainCircle from './src/MainCircle'
+import {isAtHome} from './src/isAtHome'
+import { Body, ScrollView } from './src/styled-components/Body.js'
 
-const LOCATION = SQLite.openDatabase('location6');
+
+const LOCATIONDB = SQLite.openDatabase('location10');
 
 export default class HomeScreen extends React.Component {
   state = {
@@ -16,77 +17,49 @@ export default class HomeScreen extends React.Component {
   };
 
   async componentDidMount () {
-    LOCATION.transaction(tx => {
-      tx.executeSql(
-        'select * from homeLocation;',
-        null,
-        (_, { rows: { _array } }) => this.setState({homeLocation: _array})
-      )
+    LOCATIONDB.transaction(tx => {
+      tx.executeSql('SELECT * FROM homeLocation;', [], (tx, results) => {
+        const rows = results.rows.item(0);
+        this.setState({
+          homeLocation: rows
+        })
+      })
     })
-    console.log(this.state.homeLocation);
   }
-
 
   render () {
     return (
       <>
         <StatusBar />
-        <View style={styles.scrollView}>
-          <View style={styles.body}>
+        <ScrollView>
+          <Body>
             {this.state.homeLocation === null ?
               <HomeLocation
-                LOCATIONDB={LOCATION}
+                LOCATIONDB={LOCATIONDB}
               />
               :
+              isAtHome(
+                String(Math.abs(this.state.homeLocation.latitude)),
+                String(Math.abs(this.state.homeLocation.longitude)),
+                String(Math.abs(34.581079)),
+                String(Math.abs(135.574699))
+              )
+              ?
               <MainCircle
                 st_date="4/10"
                 ed_date="5/20"
                 total_hour="200"
               />
+              :
+              <MainCircle
+                st_date="4/10"
+                ed_date="5/20"
+                total_hour="8700"
+              />
             }
-            {this.state.homeLocation !== null &&
-              <ScrollView style={styles.wrapStyle}>
-                {this.state.homeLocation.map((location) => (
-                  <View style={styles.itemStyle} key={location.id.toString()}>
-                    <Text style={styles.textStyle}>[{location.id.toString()}]  LT_{location.latitude} / LG_{location.longitude}</Text>
-                  </View>
-                ))
-                }
-              </ScrollView>
-            }
-          </View>
-        </View>
+          </Body>
+        </ScrollView>
       </>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-  },
-  body: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#eaeaea',
-  },
-  scrollView: {
-    flex: 1,
-  },
-  wrapStyle: {
-    margin: 0,
-    marginTop: 80,
-    marginBottom: 40,
-  },
-  itemStyle: {
-    marginTop: 10,
-    marginBottom: 10,
-    padding: 15,
-    backgroundColor: '#333',
-    borderRadius: 10,
-  },
-  textStyle: {
-    color: '#fff',
-  },
-});
