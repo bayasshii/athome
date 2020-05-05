@@ -15,11 +15,10 @@ export const CircleBox = styled.View.attrs(props => ({
   justify-content: center;
   align-items: center;
 `
+
 export const CircleBoxButton = styled.Button`
-  font-size: 36px;
-  font-weight: 800;
-  color: #7092E7;
 `
+
 export const CircleBoxText = styled.Text.attrs(props => ({
     type:'password',
     color: props.color || '#7092E7',

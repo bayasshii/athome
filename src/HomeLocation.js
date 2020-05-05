@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet, View, Button} from 'react-native';
 import { CircleBox, CircleBoxButton } from './styled-components/CircleBox.js'
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions'

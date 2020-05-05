@@ -9,7 +9,7 @@ import { returnIsAtHome } from './src/isAtHome'
 import { Body, ScrollView } from './src/styled-components/Body.js'
 
 
-const LOCATIONDB = SQLite.openDatabase('location16');
+const LOCATIONDB = SQLite.openDatabase('location17');
 
 export default class HomeScreen extends React.Component {
   state = {
