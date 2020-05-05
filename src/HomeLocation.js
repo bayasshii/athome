@@ -58,6 +58,8 @@ export default class HomeLocation extends React.Component {
     })
     this.insertHomeLocation(this.state.homeLatitude, this.state.homeLongitude)
     console.log("データベース追加したぜ")
+    // 親コンポーネントのstate変えて画面更新する。
+    return this.props.setStateHomeLocation();
   }
 
   render () {

@@ -1,5 +1,5 @@
 import { getDistance } from 'geolib';
-export function isAtHome(HomeLat, HomeLon, Lat, Lon) {
+export const returnIsAtHome = (HomeLat, HomeLon, Lat, Lon) => {
   let dis = getDistance(
     { latitude: HomeLat, longitude: HomeLon },
     { latitude: Lat, longitude: Lon }

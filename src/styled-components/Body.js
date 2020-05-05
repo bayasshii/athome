@@ -9,7 +9,10 @@ export const Body = styled.View`
   margin: 50px 20px 40px 20px;
   border-radius: 15px;
 `
-export const ScrollView = styled.View`
+export const ScrollView = styled.View.attrs(props => ({
+    type:'password',
+    color: props.color || '#7092E7',
+  }))`
   flex: 1;
-  background-color: #7092E7;
+  background-color: ${props => props.color};
 `
