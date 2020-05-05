@@ -23,7 +23,7 @@ export default class HomeLocation extends React.Component {
     return permissionIsValid(askResult)
   }
 
-  async componentDidMount (){
+  async componentDidMount() {
     // 位置情報の権限取得
     !this.state.isLocationPermitted &&
     this.setState({

@@ -10,7 +10,7 @@ export const returnIsAtHome = (HomeLat, HomeLon, Lat, Lon) => {
   console.log("距離："+dis+"m")
   console.log("-------------------------------------")
   let is_atHome = false;
-  if(Number(dis) < 500000000000000) {
+  if(Number(dis) < 500000000000000000000000000) {
     is_atHome = true;
   };
   return is_atHome

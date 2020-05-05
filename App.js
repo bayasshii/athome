@@ -9,11 +9,15 @@ import { returnIsAtHome } from './src/isAtHome'
 import { Body, ScrollView } from './src/styled-components/Body.js'
 
 
-const LOCATIONDB = SQLite.openDatabase('location14');
+const LOCATIONDB = SQLite.openDatabase('location16');
 
 export default class HomeScreen extends React.Component {
   state = {
-    homeLocation: null,
+    homeLatitude: null,
+    homeLongitude: null,
+    currentLatitude: null,
+    currentLongitude:null,
+    isHomeLocation: false,
     isAtHome: false,
   };
 
@@ -22,16 +26,32 @@ export default class HomeScreen extends React.Component {
       tx.executeSql('SELECT * FROM homeLocation;', [], (tx, results) => {
         const rows = results.rows.item(0);
         this.setState({
-          homeLocation: rows
+          isHomeLocation: Boolean(rows),
+          homeLatitude: rows.latitude,
+          homeLongitude: rows.longitude,
         })
       })
     })
   }
 
-  async componentDidMount() {
-    this.setStateHomeLocation()
+  setStateCurrentLocation() {
+    // 五分に一回位置情報返すAPIでこれ動かしてコンポーネント更新したい
     this.setState({
-      isAtHome: returnIsAtHome(String(Math.abs(34.581079)),String(Math.abs(135.581079)),String(Math.abs(34.581079)),String(Math.abs(135.574699)))
+      currentLatitude: 333,
+      currentLongitude: 132,
+    })
+  }
+
+  async componentDidMount() {
+    this.setStateHomeLocation();
+    this.setStateCurrentLocation();
+
+    let homeLatitude = String(Math.abs(this.state.homeLatitude))
+    let homeLongitude = String(Math.abs(this.state.homeLongitude))
+    let currentLatitude = String(Math.abs(this.state.currentLatitude))
+    let currentLongitude = String(Math.abs(this.state.currentLongitude))
+    this.setState({
+      isAtHome: returnIsAtHome(homeLatitude, homeLongitude, currentLatitude, currentLongitude)
     })
   }
 
@@ -43,18 +63,18 @@ export default class HomeScreen extends React.Component {
         <StatusBar />
         <ScrollView color={color}>
           <Body>
-            {this.state.homeLocation === null ?
-              <HomeLocation
-                LOCATIONDB={LOCATIONDB}
-                setStateHomeLocation={() => { this.setStateHomeLocation(); }}
-              />
-              :
+            {this.state.isHomeLocation ?
               <MainCircle
                 st_date="4/10"
                 ed_date="5/20"
                 total_hour="200"
                 color={color}
                 text={text}
+              />
+              :
+              <HomeLocation
+                LOCATIONDB={LOCATIONDB}
+                setStateHomeLocation={() => { this.setStateHomeLocation(); }}
               />
             }
           </Body>
