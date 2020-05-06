@@ -3,7 +3,7 @@ import * as Location from 'expo-location';
 import { ReturnIsAtHome } from './API/ReturnIsAtHome'
 import { ReturnDate } from './API/ReturnDate'
 import { ReturnTotalHour } from './API/ReturnTotalHour'
-import { ReturnCurrentLocation } from './API/ReturnCurrentLocation'
+// import { ReturnCurrentLocation } from './API/ReturnCurrentLocation'
 
 export const LogAtHome = ( LOCATIONDB, homeLatitude, homeLongitude) => {
   /*

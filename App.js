@@ -19,7 +19,7 @@ export default class HomeScreen extends React.Component {
     isAtHome: true,
     st_date: "4/20",
     en_date: "5/20",
-    total_hour: "0"
+    total_hour: "0",
   };
 
   setStateHomeLocation() {

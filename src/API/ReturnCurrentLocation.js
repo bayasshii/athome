@@ -1,17 +1,14 @@
-export const ReturnCurrentLocation = (LOCATIONDB) => {
+import * as Location from 'expo-location';
+export async function ReturnCurrentLocation() {
   /*
   -----------------------------------------------------
   / 現在地の緯度経度返すだけ。
   / データベースに打ち込むのは親のコンポーネントでやる
-  / permission系もここでクリアする
+  / permission系も親要素でやる。
   -----------------------------------------------------
   */
-  //logAtHomeテーブルからisAtHome==trueの数を引っ張ってくる
-
-  let background_interval = 5
-  // let total_hour = ReturnNumber()*background_interval
-
-  let latitude = "30"
-  let longitude = "135"
-  return ([latitude, loongitude])
+  let homeLocation = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest});
+  let latitude = JSON.stringify(homeLocation.coords.latitude)
+  let longitude = JSON.stringify(homeLocation.coords.longitude)
+  return([String(Math.abs(latitude)),String(Math.abs(longitude))])
 }
