@@ -1,6 +1,8 @@
 import * as SQLite from 'expo-sqlite';
 import * as Location from 'expo-location';
-import { returnIsAtHome } from './isAtHome'
+import { ReturnIsAtHome } from './ReturnIsAtHome'
+import { ReturnDate } from './ReturnDate'
+import { ReturnTotalHour } from './ReturnTotalHour'
 
 export const LogAtHome = ( LOCATIONDB, homeLatitude, homeLongitude) => {
   /*
@@ -9,6 +11,7 @@ export const LogAtHome = ( LOCATIONDB, homeLatitude, homeLongitude) => {
   currentLocationをここで取る
   それぞれの値をisAtHomeで計算して返す
   ・・・・・・dateとtotal_hourはそれぞれ関数切り分けるか！！
+  ・・・・・・・・・・保守性考えたら現在地のAPIも切り分けるべきでは？？？
   ---------------------------------
   */
 
@@ -16,15 +19,15 @@ export const LogAtHome = ( LOCATIONDB, homeLatitude, homeLongitude) => {
   let currentLatitude = String(Math.abs(30))
   let currentLongitude = String(Math.abs(130))
   // これをlogAtHomeテーブルにぶちこむ、returnにも返す
-  let isAtHome = returnIsAtHome(homeLatitude, homeLongitude, currentLatitude, currentLongitude)
+  let isAtHome = ReturnIsAtHome(homeLatitude, homeLongitude, currentLatitude, currentLongitude)
 
   // 何日から何日までか(date)定義する
-  let st_date ="4/10"
-  let en_date ="5/22"
-
+  let date = ReturnDate(LOCATIONDB);
+  let st_date = date[0];
+  let en_date = date[1];
 
   // 総在宅時間を定義する
-  let total_hour = "500"
+  let total_hour = ReturnTotalHour(LOCATIONDB);
 
 
   // logAtHomeテーブルがなければ作る
@@ -38,7 +41,7 @@ export const LogAtHome = ( LOCATIONDB, homeLatitude, homeLongitude) => {
   LOCATIONDB.transaction(tx => {
     tx.executeSql(
       `insert into logAtHome (isAtHome, date) values (?,?);`,
-      [isAtHome, "04/10"]
+      [isAtHome, "04/30"]
     );
   });
 
