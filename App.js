@@ -3,10 +3,12 @@ import { StatusBar } from 'react-native';
 import * as BackgroundFetch from "expo-background-fetch";
 import * as TaskManager from "expo-task-manager";
 import * as SQLite from 'expo-sqlite';
+
 import HomeLocation from './src/HomeLocation'
-import MainCircle from './src/MainCircle'
 import { LogAtHome } from './src/LogAtHome'
-import { Body, ScrollView } from './src/styled-components/Body.js'
+
+import MainCircle from './src/styled-components/MainCircle'
+import { Body, ScrollView } from './src/styled-components/Body'
 
 
 const LOCATIONDB = SQLite.openDatabase('location19');

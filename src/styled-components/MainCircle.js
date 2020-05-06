@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { CircleBox, CircleBoxText } from './styled-components/CircleBox.js'
+import { CircleBox, CircleBoxText } from './CircleBox.js'
 import styled from 'styled-components/native'
 
 const TopText = styled.Text.attrs(props => ({
