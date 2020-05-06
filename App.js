@@ -6,53 +6,50 @@ import * as SQLite from 'expo-sqlite';
 import HomeLocation from './src/HomeLocation'
 import MainCircle from './src/MainCircle'
 import { returnIsAtHome } from './src/isAtHome'
+import { LogAtHome } from './src/LogAtHome'
 import { Body, ScrollView } from './src/styled-components/Body.js'
 
 
-const LOCATIONDB = SQLite.openDatabase('location17');
+const LOCATIONDB = SQLite.openDatabase('location19');
 
 export default class HomeScreen extends React.Component {
   state = {
-    homeLatitude: null,
-    homeLongitude: null,
     currentLatitude: null,
     currentLongitude:null,
     isHomeLocation: false,
-    isAtHome: false,
+    isAtHome: true,
+    st_date: "4/20",
+    en_date: "5/20",
+    total_hour: "300"
   };
 
   setStateHomeLocation() {
     LOCATIONDB.transaction(tx => {
-      tx.executeSql('SELECT * FROM homeLocation;', [], (tx, results) => {
-        const rows = results.rows.item(0);
+      tx.executeSql('SELECT * FROM homeLocation WHERE id == 1;', [], (_, { rows: { _array } }) => {
         this.setState({
-          isHomeLocation: Boolean(rows),
-          homeLatitude: rows.latitude,
-          homeLongitude: rows.longitude,
+          isHomeLocation: Boolean(_array[0])
         })
-      })
+        let homeLatitude = String(Math.abs(_array[0].latitude))
+        let homeLongitude = String(Math.abs(_array[0].longitude))
+        let currentDate = LogAtHome(LOCATIONDB, homeLatitude, homeLongitude)
+        this.setStateCurrentLocation(currentDate[0], currentDate[1], currentDate[2], currentDate[3])
+      }
+      )
     })
   }
 
-  setStateCurrentLocation() {
-    // 五分に一回位置情報返すAPIでこれ動かしてコンポーネント更新したい
+  setStateCurrentLocation(isAtHome, st_date, en_date, total_hour) {
+    // LogAtHomeから帰ってきた値を入れるよう
     this.setState({
-      currentLatitude: 333,
-      currentLongitude: 132,
+      isAtHome: isAtHome,
+      st_date: st_date,
+      en_date: en_date,
+      total_hour: total_hour
     })
   }
 
   async componentDidMount() {
     this.setStateHomeLocation();
-    this.setStateCurrentLocation();
-
-    let homeLatitude = String(Math.abs(this.state.homeLatitude))
-    let homeLongitude = String(Math.abs(this.state.homeLongitude))
-    let currentLatitude = String(Math.abs(this.state.currentLatitude))
-    let currentLongitude = String(Math.abs(this.state.currentLongitude))
-    this.setState({
-      isAtHome: returnIsAtHome(homeLatitude, homeLongitude, currentLatitude, currentLongitude)
-    })
   }
 
   render () {
@@ -65,9 +62,9 @@ export default class HomeScreen extends React.Component {
           <Body>
             {this.state.isHomeLocation ?
               <MainCircle
-                st_date="4/10"
-                ed_date="5/20"
-                total_hour="200"
+                st_date={this.state.st_date}
+                ed_date={this.state.en_date}
+                total_hour={this.state.total_hour}
                 color={color}
                 text={text}
               />
