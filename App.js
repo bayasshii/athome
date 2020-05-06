@@ -5,7 +5,6 @@ import * as TaskManager from "expo-task-manager";
 import * as SQLite from 'expo-sqlite';
 import HomeLocation from './src/HomeLocation'
 import MainCircle from './src/MainCircle'
-import { returnIsAtHome } from './src/isAtHome'
 import { LogAtHome } from './src/LogAtHome'
 import { Body, ScrollView } from './src/styled-components/Body.js'
 
@@ -14,13 +13,11 @@ const LOCATIONDB = SQLite.openDatabase('location19');
 
 export default class HomeScreen extends React.Component {
   state = {
-    currentLatitude: null,
-    currentLongitude:null,
     isHomeLocation: false,
     isAtHome: true,
     st_date: "4/20",
     en_date: "5/20",
-    total_hour: "300"
+    total_hour: "0"
   };
 
   setStateHomeLocation() {
@@ -32,6 +29,7 @@ export default class HomeScreen extends React.Component {
         let homeLatitude = String(Math.abs(_array[0].latitude))
         let homeLongitude = String(Math.abs(_array[0].longitude))
         let currentDate = LogAtHome(LOCATIONDB, homeLatitude, homeLongitude)
+        // isAtHome, st_date, en_date, total_hour
         this.setStateCurrentLocation(currentDate[0], currentDate[1], currentDate[2], currentDate[3])
       }
       )
