@@ -1,34 +1,14 @@
 import React from 'react';
 import { CircleBox, CircleBoxButton } from './styled-components/CircleBox.js'
 import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions'
 
 export default class HomeLocation extends React.Component {
   state = {
     homeLatitude: null,
     homeLongitude:null,
-    isLocationPermitted: false,
   };
 
-  async _confirmLocationPermission () {
-    const permissionIsValid = (permission) => {
-      if (permission.status !== 'granted') return false
-      if (Platform.OS !== 'ios') return true
-      return permission.permissions.location.ios.scope === 'always'
-    }
-    const permission = await Permissions.getAsync(Permissions.LOCATION)
-    if (permissionIsValid(permission)) return true
-    const askResult = await Permissions.askAsync(Permissions.LOCATION)
-    return permissionIsValid(askResult)
-  }
-
   async componentDidMount() {
-    // 位置情報の権限取得
-    !this.state.isLocationPermitted &&
-    this.setState({
-      isLocationPermitted: await this._confirmLocationPermission()
-    })
-
     const homeLocation = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest});
     const homeLatitude = JSON.stringify(homeLocation.coords.latitude)
     const homeLongitude = JSON.stringify(homeLocation.coords.longitude)

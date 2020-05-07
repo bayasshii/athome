@@ -1,4 +1,4 @@
-export const ReturnTotalHour = (LOCATIONDB) => {
+export async function ReturnTotalHour(LOCATIONDB) {
   /*
   -----------------------------------------------------
   / データベースを受け取って
@@ -8,20 +8,17 @@ export const ReturnTotalHour = (LOCATIONDB) => {
   / で行けるはず
   -----------------------------------------------------
   */
+  
   //logAtHomeテーブルからisAtHome==trueの数を引っ張ってくる
-  ReturnNumber = () => {
-    LOCATIONDB.transaction(tx => {
-      tx.executeSql('SELECT * FROM logAtHome WHERE isAtHome == true;', [], (_, { rows: { _array } }) => {
-        return (_array.length)
-      }
-      )
-    })
-  }
-
-  // ReturnNumber()
-  // let background_interval = 5
-  // let total_hour = ReturnNumber()*background_interval
-
-  let total_hour = "800"
-  return (total_hour)
+  return(
+    await (() =>
+    new Promise(resolve => {
+      LOCATIONDB.transaction(tx => {
+        tx.executeSql('SELECT * FROM logAtHome WHERE isAtHome == true;', [], (_, { rows: { _array } }) => {
+          resolve(_array.length)
+        }
+        )
+      })
+    }))()
+  )
 }

@@ -13,6 +13,7 @@
 #import <UMCore/UMModuleRegistry.h>
 #import <UMReactNativeAdapter/UMNativeModulesProxy.h>
 #import <UMReactNativeAdapter/UMModuleRegistryAdapter.h>
+#import <TSBackgroundFetch/TSBackgroundFetch.h>
 
 @interface AppDelegate ()
 
@@ -39,6 +40,8 @@
 #endif
 
   [super application:application didFinishLaunchingWithOptions:launchOptions];
+
+  [[TSBackgroundFetch sharedInstance] didFinishLaunching];
 
   return YES;
 }

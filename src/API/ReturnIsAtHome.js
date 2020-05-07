@@ -12,7 +12,7 @@ export const ReturnIsAtHome = (HomeLat, HomeLon, CurrentLat, CurrentLon) => {
     { latitude: CurrentLat, longitude: CurrentLon }
   );
   let is_atHome = false;
-  if(Number(dis) < 500000000000000000000000000) {
+  if(Number(dis) < 5) {
     is_atHome = true;
   };
   return is_atHome
