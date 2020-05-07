@@ -11,7 +11,8 @@ import MainCircle from './src/styled-components/MainCircle'
 import { Body, ScrollView } from './src/styled-components/Body'
 
 
-const LOCATIONDB = SQLite.openDatabase('location19');
+const LOCATIONDB = SQLite.openDatabase('location23');
+const TaskName = 'BACKGROUNDTASK';
 
 export default class HomeScreen extends React.Component {
   state = {
@@ -28,6 +29,7 @@ export default class HomeScreen extends React.Component {
         this.setState({
           isHomeLocation: Boolean(_array[0])
         })
+
         let homeLatitude = String(Math.abs(_array[0].latitude))
         let homeLongitude = String(Math.abs(_array[0].longitude))
         let currentDate = LogAtHome(LOCATIONDB, homeLatitude, homeLongitude)
@@ -37,6 +39,29 @@ export default class HomeScreen extends React.Component {
       )
     })
   }
+
+  // バックグラウンドタスクの定義
+  difineBackgroundTask(){
+    if (!TaskManager.isTaskDefined(TaskName)) {
+      console.log('taskName定義されてなかったから,これから定義すんで！')
+      TaskManager.defineTask(TaskName, ()=>{
+        try {
+          // これが実行されてほしい。
+          // これにsetStateHomeLocation()入れたい。
+          console.log("タスク実行されたで！！！")
+          return BackgroundFetch.Result.NewData
+        } catch (err) {
+          return BackgroundFetch.Result.Failed;
+        }
+      })
+      console.log('taskName定義完了！')
+    }
+  }
+
+  registerTaskAsync = async () => {
+     await BackgroundFetch.registerTaskAsync(TaskName);
+     await BackgroundFetch.setMinimumIntervalAsync(15);
+   }
 
   setStateCurrentLocation(isAtHome, st_date, en_date, total_hour) {
     // LogAtHomeから帰ってきた値を入れるよう
@@ -50,6 +75,8 @@ export default class HomeScreen extends React.Component {
 
   async componentDidMount() {
     this.setStateHomeLocation();
+    this.difineBackgroundTask();
+    this.registerTaskAsync();
   }
 
   render () {

@@ -15,15 +15,6 @@ export const ReturnDate = (LOCATIONDB) => {
       )
     })
   }
-
-  //logAtHomeテーブルの最後を抽出してdateを引っ張ってくる
-  ReturnEnDate = () => {
-    LOCATIONDB.transaction(tx => {
-      tx.executeSql('SELECT * FROM logAtHome ORDER BY id DESC LIMIT 1;', [], (_, { rows: { _array } }) => {
-        return (_array[0].date);
-      })
-    })
-  }
   /*
   console.log("--------------st_date-----------------------")
   console.log(ReturnStDate())
@@ -31,6 +22,6 @@ export const ReturnDate = (LOCATIONDB) => {
   console.log("--------------ed_date-----------------------")
   */
   let st_date = "04/20"
-  let en_date = "05/30"
-  return ([st_date, en_date])
+
+  return (st_date)
 }

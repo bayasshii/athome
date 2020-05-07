@@ -17,15 +17,21 @@ export const LogAtHome = ( LOCATIONDB, homeLatitude, homeLongitude) => {
   */
 
   // 家にいるかどうか(isAtHome)の判定
+  // ReturnCurrentLocationがライフタイム？の関係でうまくいかぬ
   let currentLatitude = String(Math.abs(30))
   let currentLongitude = String(Math.abs(130))
-  // これをlogAtHomeテーブルにぶちこむ、returnにも返す
   let isAtHome = ReturnIsAtHome(homeLatitude, homeLongitude, currentLatitude, currentLongitude)
 
   // 何日から何日までか(date)定義する
-  let date = ReturnDate(LOCATIONDB);
-  let st_date = date[0];
-  let en_date = date[1];
+  let st_date = ReturnDate(LOCATIONDB);
+
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth()+1;
+  const date = today.getDate();
+
+  let en_date = month+"/"+date;
+  let en_date_for_DB =year+"/"+month+"/"+date;
 
   // 総在宅時間を定義する
   let total_hour = ReturnTotalHour(LOCATIONDB);
@@ -42,7 +48,7 @@ export const LogAtHome = ( LOCATIONDB, homeLatitude, homeLongitude) => {
   LOCATIONDB.transaction(tx => {
     tx.executeSql(
       `insert into logAtHome (isAtHome, date) values (?,?);`,
-      [isAtHome, "04/30"]
+      [isAtHome, en_date_for_DB]
     );
   });
 
