@@ -42,13 +42,17 @@ export async function LogAtHome( LOCATIONDB, homeLatitude, homeLongitude){
       [isAtHome, en_date_for_DB]
     );
   });
+  console.log("--------------これが何回も実行されたら困るな...-----------------")
+  console.log("--------------componenDidMountに入れたらやばいなぁ..-----------------")
+  console.log("--------------タスクから呼ばれたときはtrueを引数にして、componenDidMountの時はfalse-----------------")
+  console.log("--------------それならタスクからの時はデータベースに保存。とかできるかも-----------------")
+  console.log("--------------まぁそんなことよりもバックグラウンドの実装の方が優先度高いけどな笑-----------------")
 
   // 何日から何日までか(date)定義する
   let st_date = await ReturnDate(LOCATIONDB);
 
   // 総在宅時間を定義する
   let total_hour = await ReturnTotalHour(LOCATIONDB);
-  console.log("-----------------------------------------")
 
 
   return([isAtHome, st_date, en_date, total_hour])

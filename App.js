@@ -7,12 +7,13 @@ import * as SQLite from 'expo-sqlite';
 
 import HomeLocation from './src/HomeLocation'
 import { LogAtHome } from './src/LogAtHome'
+import { ReturnHomeLocation } from './src/API/ReturnHomeLocation'
 
 import MainCircle from './src/styled-components/MainCircle'
 import { Body, ScrollView } from './src/styled-components/Body'
 
 
-const LOCATIONDB = SQLite.openDatabase('location26');
+const LOCATIONDB = SQLite.openDatabase('location27');
 /*
 const TaskName = 'BACKGROUNDTASK';
 
@@ -68,20 +69,12 @@ export default class HomeScreen extends React.Component {
     return permissionIsValid(askResult)
   }
 
-  setStateHomeLocation() {
-    LOCATIONDB.transaction(tx => {
-      tx.executeSql('SELECT * FROM homeLocation WHERE id == 1;', [], async (_, { rows: { _array } }) => {
-        this.setState({
-          isHomeLocation: Boolean(_array[0])
-        })
-
-        let homeLatitude = String(Math.abs(_array[0].latitude))
-        let homeLongitude = String(Math.abs(_array[0].longitude))
-        let currentDate = await LogAtHome(LOCATIONDB, homeLatitude, homeLongitude)
-        // isAtHome, st_date, en_date, total_hour
-        this.setStateCurrentLocation(currentDate[0], currentDate[1], currentDate[2], currentDate[3])
-      }
-      )
+  async setStateHomeLocation() {
+    let homeLocation = await ReturnHomeLocation(LOCATIONDB)
+    await this.setState({
+      isHomeLocation: homeLocation[0],
+      homeLatitude: homeLocation[1],
+      homeLongitude: homeLocation[2],
     })
   }
 
@@ -96,18 +89,18 @@ export default class HomeScreen extends React.Component {
   }
 
   async componentDidMount() {
-    await this.setState({
-      isHomeLocation: ReturnHomeLocation(LOCATIONDB)[0],
-      homeLatitude: ReturnHomeLocation(LOCATIONDB)[1],
-      homeLongitude: ReturnHomeLocation(LOCATIONDB)[2],
-    })
+    await this.setStateHomeLocation()
+
+    // 最新のデータ引っ張ってくる。ここで呼ぶ時はデータベースに保存せんようにする
+    let currentDate = await LogAtHome(LOCATIONDB, this.state.homeLatitude, this.state.homeLongitude)
+    this.setStateCurrentLocation(currentDate[0], currentDate[1], currentDate[2], currentDate[3])
+
     // 位置情報の権限取得
     if(!this.state.isLocationPermitted){
       this.setState({
         isLocationPermitted: await this._confirmLocationPermission()
       })
     }
-    this.setStateHomeLocation();
   }
 
   render () {

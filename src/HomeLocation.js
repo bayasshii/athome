@@ -13,6 +13,7 @@ export default class HomeLocation extends React.Component {
     const homeLocation = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest});
     const homeLatitude = JSON.stringify(homeLocation.coords.latitude)
     const homeLongitude = JSON.stringify(homeLocation.coords.longitude)
+    // Logの方にも入れとく。何にも値がないとよくないので。
     LogAtHome(this.props.LOCATIONDB, homeLatitude, homeLongitude)
     this.setState({
       homeLatitude: homeLatitude,
