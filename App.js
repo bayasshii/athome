@@ -12,15 +12,45 @@ import MainCircle from './src/styled-components/MainCircle'
 import { Body, ScrollView } from './src/styled-components/Body'
 
 
-const LOCATIONDB = SQLite.openDatabase('location23');
+const LOCATIONDB = SQLite.openDatabase('location26');
+/*
 const TaskName = 'BACKGROUNDTASK';
+
+// バックグラウンドタスクの定義
+function difineBackgroundTask() {
+  if (!TaskManager.isTaskDefined(TaskName)) {
+    console.log('taskName定義されてなかったから,これから定義すんで！')
+    TaskManager.defineTask(TaskName, ()=>{
+      try {
+        // これが実行されてほしい。
+        // これにsetStateHomeLocation()入れたい。
+        console.log("これが実行されてほしい。")
+        console.log("タスク実行されたで！！！")
+        return BackgroundFetch.Result.NewData
+      } catch (err) {
+        return BackgroundFetch.Result.Failed;
+      }
+    })
+    console.log('taskName定義完了！')
+  }
+}
+
+// 定義したタスクをバックグラウンドに登録
+registerTaskAsync = () => {
+   BackgroundFetch.registerTaskAsync(TaskName);
+   BackgroundFetch.setMinimumIntervalAsync(15);
+ }
+
+difineBackgroundTask();
+registerTaskAsync();
+*/
 
 export default class HomeScreen extends React.Component {
   state = {
     isHomeLocation: false,
     isAtHome: true,
-    st_date: "4/20",
-    en_date: "5/20",
+    st_date: "null",
+    en_date: "null",
     total_hour: "0",
     isLocationPermitted: false,
   };
@@ -55,30 +85,6 @@ export default class HomeScreen extends React.Component {
     })
   }
 
-  // バックグラウンドタスクの定義
-  difineBackgroundTask(){
-    if (!TaskManager.isTaskDefined(TaskName)) {
-      console.log('taskName定義されてなかったから,これから定義すんで！')
-      TaskManager.defineTask(TaskName, ()=>{
-        try {
-          // これが実行されてほしい。
-          // これにsetStateHomeLocation()入れたい。
-          console.log("タスク実行されたで！！！")
-          return BackgroundFetch.Result.NewData
-        } catch (err) {
-          return BackgroundFetch.Result.Failed;
-        }
-      })
-      console.log('taskName定義完了！')
-    }
-  }
-
-  // 定義したタスクをバックグラウンドに登録
-  registerTaskAsync = async () => {
-     await BackgroundFetch.registerTaskAsync(TaskName);
-     await BackgroundFetch.setMinimumIntervalAsync(15);
-   }
-
   setStateCurrentLocation(isAtHome, st_date, en_date, total_hour) {
     // LogAtHomeから帰ってきた値を入れるよう
     this.setState({
@@ -90,15 +96,18 @@ export default class HomeScreen extends React.Component {
   }
 
   async componentDidMount() {
-    // 位置情報の権限取得
-    !this.state.isLocationPermitted &&
-    this.setState({
-      isLocationPermitted: await this._confirmLocationPermission()
+    await this.setState({
+      isHomeLocation: ReturnHomeLocation(LOCATIONDB)[0],
+      homeLatitude: ReturnHomeLocation(LOCATIONDB)[1],
+      homeLongitude: ReturnHomeLocation(LOCATIONDB)[2],
     })
-
+    // 位置情報の権限取得
+    if(!this.state.isLocationPermitted){
+      this.setState({
+        isLocationPermitted: await this._confirmLocationPermission()
+      })
+    }
     this.setStateHomeLocation();
-    this.difineBackgroundTask();
-    this.registerTaskAsync();
   }
 
   render () {

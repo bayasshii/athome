@@ -20,9 +20,7 @@ export async function LogAtHome( LOCATIONDB, homeLatitude, homeLongitude){
   let currentLongitude = String(Math.abs(currentLocation[1]))
   let isAtHome = ReturnIsAtHome(homeLatitude, homeLongitude, currentLatitude, currentLongitude)
 
-  // 何日から何日までか(date)定義する
-  let st_date = await ReturnDate(LOCATIONDB);
-
+  // 今日の情報
   const today = new Date();
   const year = today.getFullYear();
   const month = today.getMonth()+1;
@@ -31,17 +29,12 @@ export async function LogAtHome( LOCATIONDB, homeLatitude, homeLongitude){
   let en_date = month+"/"+date;
   let en_date_for_DB =year+"/"+month+"/"+date;
 
-  // 総在宅時間を定義する
-  let total_hour = await ReturnTotalHour(LOCATIONDB);
-
-
   // logAtHomeテーブルがなければ作る
   LOCATIONDB.transaction(tx =>{
     tx.executeSql(
       'create table if not exists logAtHome (id integer primary key not null, isAtHome boolean, date string);'
     )
   })
-
   // logAtHomeテーブルの中に値を入れる
   LOCATIONDB.transaction(tx => {
     tx.executeSql(
@@ -49,6 +42,14 @@ export async function LogAtHome( LOCATIONDB, homeLatitude, homeLongitude){
       [isAtHome, en_date_for_DB]
     );
   });
+
+  // 何日から何日までか(date)定義する
+  let st_date = await ReturnDate(LOCATIONDB);
+
+  // 総在宅時間を定義する
+  let total_hour = await ReturnTotalHour(LOCATIONDB);
+  console.log("-----------------------------------------")
+
 
   return([isAtHome, st_date, en_date, total_hour])
 }

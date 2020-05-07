@@ -1,6 +1,7 @@
 import React from 'react';
 import { CircleBox, CircleBoxButton } from './styled-components/CircleBox.js'
 import * as Location from 'expo-location';
+import { LogAtHome } from './LogAtHome'
 
 export default class HomeLocation extends React.Component {
   state = {
@@ -12,6 +13,7 @@ export default class HomeLocation extends React.Component {
     const homeLocation = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest});
     const homeLatitude = JSON.stringify(homeLocation.coords.latitude)
     const homeLongitude = JSON.stringify(homeLocation.coords.longitude)
+    LogAtHome(this.props.LOCATIONDB, homeLatitude, homeLongitude)
     this.setState({
       homeLatitude: homeLatitude,
       homeLongitude: homeLongitude,

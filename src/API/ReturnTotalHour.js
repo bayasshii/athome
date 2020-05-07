@@ -8,7 +8,7 @@ export async function ReturnTotalHour(LOCATIONDB) {
   / で行けるはず
   -----------------------------------------------------
   */
-  
+
   //logAtHomeテーブルからisAtHome==trueの数を引っ張ってくる
   return(
     await (() =>
