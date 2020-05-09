@@ -13,8 +13,6 @@ export default class HomeLocation extends React.Component {
     const homeLocation = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest});
     const homeLatitude = JSON.stringify(homeLocation.coords.latitude)
     const homeLongitude = JSON.stringify(homeLocation.coords.longitude)
-    // Logの方にも入れとく。何にも値がないとよくないので。
-    LogAtHome(this.props.LOCATIONDB, homeLatitude, homeLongitude)
     this.setState({
       homeLatitude: homeLatitude,
       homeLongitude: homeLongitude,
@@ -40,6 +38,11 @@ export default class HomeLocation extends React.Component {
     })
     this.insertHomeLocation(this.state.homeLatitude, this.state.homeLongitude)
     console.log("データベース追加したぜ")
+
+    // Logの方にも入れとく。何にも値がないとよくないので。
+    console.log("まさかこれ？")
+    LogAtHome(this.props.LOCATIONDB,this.state.homeLatitude, this.state.homeLongitude,true)
+
     // 親コンポーネントのstate変えて画面更新する。
     return this.props.setStateHomeLocation();
   }

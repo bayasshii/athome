@@ -4,6 +4,7 @@ import * as BackgroundFetch from "expo-background-fetch";
 import * as TaskManager from "expo-task-manager";
 import * as Permissions from 'expo-permissions'
 import * as SQLite from 'expo-sqlite';
+import * as Location from 'expo-location';
 
 import HomeLocation from './src/HomeLocation'
 import { LogAtHome } from './src/LogAtHome'
@@ -13,38 +14,31 @@ import MainCircle from './src/styled-components/MainCircle'
 import { Body, ScrollView } from './src/styled-components/Body'
 
 
-const LOCATIONDB = SQLite.openDatabase('location27');
-/*
+const LOCATIONDB = SQLite.openDatabase('location42');
 const TaskName = 'BACKGROUNDTASK';
 
-// バックグラウンドタスクの定義
-function difineBackgroundTask() {
-  if (!TaskManager.isTaskDefined(TaskName)) {
-    console.log('taskName定義されてなかったから,これから定義すんで！')
-    TaskManager.defineTask(TaskName, ()=>{
-      try {
-        // これが実行されてほしい。
-        // これにsetStateHomeLocation()入れたい。
-        console.log("これが実行されてほしい。")
-        console.log("タスク実行されたで！！！")
-        return BackgroundFetch.Result.NewData
-      } catch (err) {
-        return BackgroundFetch.Result.Failed;
-      }
-    })
-    console.log('taskName定義完了！')
+TaskManager.defineTask(TaskName, async () => {
+  try {
+    // これが実行されてほしい。
+    // これにsetStateHomeLocation()入れたい。
+    console.log("定義したタスク実行されたで！！！")
+    let homeLocation = await ReturnHomeLocation(LOCATIONDB)
+
+    // ここで呼ぶ時はデータベースに保存する。一定間隔で保存する。
+    let currentDate = await LogAtHome(LOCATIONDB, homeLocation[1], homeLocation[2], true)
+    HomeScreen.setStateCurrentLocation(currentDate[0], currentDate[1], currentDate[2], currentDate[3])
+    return BackgroundFetch.Result.NewData;
   }
-}
+  catch (error) {
+    return BackgroundFetch.Result.Failed;
+  }
+});
 
-// 定義したタスクをバックグラウンドに登録
-registerTaskAsync = () => {
-   BackgroundFetch.registerTaskAsync(TaskName);
-   BackgroundFetch.setMinimumIntervalAsync(15);
- }
+BackgroundFetch.registerTaskAsync(TaskName);
+BackgroundFetch.setMinimumIntervalAsync(10);
 
-difineBackgroundTask();
-registerTaskAsync();
-*/
+//Location.startLocationUpdatesAsync(TaskName)
+
 
 export default class HomeScreen extends React.Component {
   state = {
@@ -69,6 +63,7 @@ export default class HomeScreen extends React.Component {
     return permissionIsValid(askResult)
   }
 
+  // homeLocationから帰ってきた値を入れる関数
   async setStateHomeLocation() {
     let homeLocation = await ReturnHomeLocation(LOCATIONDB)
     await this.setState({
@@ -76,10 +71,16 @@ export default class HomeScreen extends React.Component {
       homeLatitude: homeLocation[1],
       homeLongitude: homeLocation[2],
     })
+
+    // 現在のデータをsetStateするここでやらなHomeLocationで値更新できひん。
+    // ここで呼ぶ時はデータベースに保存せんようにする
+    let currentDate = await LogAtHome(LOCATIONDB, this.state.homeLatitude, this.state.homeLongitude, false)
+    this.setStateCurrentLocation(currentDate[0], currentDate[1], currentDate[2], currentDate[3])
   }
 
+  // LogAtHomeから帰ってきた値を入れる関数
   setStateCurrentLocation(isAtHome, st_date, en_date, total_hour) {
-    // LogAtHomeから帰ってきた値を入れるよう
+    console.log("LogAtHomeの値格納したで！")
     this.setState({
       isAtHome: isAtHome,
       st_date: st_date,
@@ -89,18 +90,16 @@ export default class HomeScreen extends React.Component {
   }
 
   async componentDidMount() {
-    await this.setStateHomeLocation()
-
-    // 最新のデータ引っ張ってくる。ここで呼ぶ時はデータベースに保存せんようにする
-    let currentDate = await LogAtHome(LOCATIONDB, this.state.homeLatitude, this.state.homeLongitude)
-    this.setStateCurrentLocation(currentDate[0], currentDate[1], currentDate[2], currentDate[3])
-
     // 位置情報の権限取得
     if(!this.state.isLocationPermitted){
       this.setState({
         isLocationPermitted: await this._confirmLocationPermission()
       })
     }
+
+    // まずhomeLocationをsetState
+    await this.setStateHomeLocation()
+
   }
 
   render () {

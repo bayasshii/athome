@@ -15,7 +15,7 @@ export async function ReturnTotalHour(LOCATIONDB) {
     new Promise(resolve => {
       LOCATIONDB.transaction(tx => {
         tx.executeSql('SELECT * FROM logAtHome WHERE isAtHome == true;', [], (_, { rows: { _array } }) => {
-          resolve(_array.length)
+          resolve(_array.length+1)
         }
         )
       })
