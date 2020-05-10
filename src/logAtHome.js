@@ -49,7 +49,6 @@ export async function LogAtHome( LOCATIONDB, homeLatitude, homeLongitude, boolea
     });
     console.log("--------------データベースにほぞん！！-----------------")
   }
-  console.log("上のやつが呼ばれる意味が分からん")
 
   // 何日から何日までか(date)定義する
   let st_date = await ReturnDate(LOCATIONDB);

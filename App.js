@@ -14,7 +14,7 @@ import MainCircle from './src/styled-components/MainCircle'
 import { Body, ScrollView } from './src/styled-components/Body'
 
 
-const LOCATIONDB = SQLite.openDatabase('location42');
+const LOCATIONDB = SQLite.openDatabase('location43');
 const TaskName = 'BACKGROUNDTASK';
 
 TaskManager.defineTask(TaskName, async () => {
@@ -23,10 +23,9 @@ TaskManager.defineTask(TaskName, async () => {
     // これにsetStateHomeLocation()入れたい。
     console.log("定義したタスク実行されたで！！！")
     let homeLocation = await ReturnHomeLocation(LOCATIONDB)
-
     // ここで呼ぶ時はデータベースに保存する。一定間隔で保存する。
     let currentDate = await LogAtHome(LOCATIONDB, homeLocation[1], homeLocation[2], true)
-    HomeScreen.setStateCurrentLocation(currentDate[0], currentDate[1], currentDate[2], currentDate[3])
+    await HomeScreen.setStateCurrentLocation(currentDate[0], currentDate[1], currentDate[2], currentDate[3])
     return BackgroundFetch.Result.NewData;
   }
   catch (error) {
@@ -79,9 +78,9 @@ export default class HomeScreen extends React.Component {
   }
 
   // LogAtHomeから帰ってきた値を入れる関数
-  setStateCurrentLocation(isAtHome, st_date, en_date, total_hour) {
-    console.log("LogAtHomeの値格納したで！")
-    this.setState({
+  async setStateCurrentLocation(isAtHome, st_date, en_date, total_hour) {
+    console.log("LogAtHomeの値stateにsetしたで！")
+    await this.setState({
       isAtHome: isAtHome,
       st_date: st_date,
       en_date: en_date,
