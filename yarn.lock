@@ -3135,6 +3135,11 @@ fast-levenshtein@~2.0.6:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
+fast-plist@^0.1.2:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/fast-plist/-/fast-plist-0.1.3.tgz#328cd9335e93a2479ac90814a1302437574ea925"
+  integrity sha512-d9cEfo/WcOezgPLAC/8t8wGb6YOD6JTCPMw2QcG2nAdFmyY+9rTUizCTaGjIZAloWENTEUMAPpkUAIJJJ0i96A==
+
 fb-watchman@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/fb-watchman/-/fb-watchman-2.0.1.tgz#fc84fb39d2709cf3ff6d743706157bb5708a8a85"
@@ -3359,6 +3364,11 @@ gensync@^1.0.0-beta.1:
   version "1.0.0-beta.1"
   resolved "https://registry.yarnpkg.com/gensync/-/gensync-1.0.0-beta.1.tgz#58f4361ff987e5ff6e1e7a210827aa371eaac269"
   integrity sha512-r8EC6NO1sngH/zdD9fiRDLdcgnbayXah+mLgManTaIZJqEC1MZstmnox8KpnI2/fxQwrp5OpCOYWLp4rBl4Jcg==
+
+geolib@3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/geolib/-/geolib-3.2.1.tgz#1d7c6e7106eddc10445ba2038550aab63d6e4fa4"
+  integrity sha512-O9nD8iSD4VimupKak8bKySLkkWI5VWetxIXsU7jmJRXxBFRR9LxSXGfTomtcHJLSRiznx+YHXHTOIVq4qgQmPw==
 
 get-caller-file@^1.0.1:
   version "1.0.3"
@@ -5725,9 +5735,9 @@ qs@^6.5.0:
   integrity sha512-EbZYNarm6138UKKq46tdx08Yo/q9ZhFoAXAI1meAFd2GtbRDhbZY2WQSICskT0c5q99aFzLG1D4nvTk9tqfXIw==
 
 qs@~6.5.2:
-  version "6.5.2"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
-  integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
+  version "6.5.3"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.3.tgz#3aeeffc91967ef6e35c0e488ef46fb296ab76aad"
+  integrity sha512-qxXIEh4pCGfHICj1mAJQ2/2XVZkjCDTcEgfoSQxc/fYivUZxTkk7L3bDBJSoNrEzXI17oUO5Dp07ktqE5KzczA==
 
 query-string@^5.0.1:
   version "5.1.1"
@@ -5770,6 +5780,15 @@ react-is@^16.12.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-i
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
+
+react-native-background-fetch@3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-background-fetch/-/react-native-background-fetch-3.0.4.tgz#0b1e8b282e482343ce7f478ffb94cb72dfde054a"
+  integrity sha512-ZUfwFPDvTRK4Tkl59Is9t2L8cekgRIUA1jNAzMjNrH2O9hpPJ3jYGzfp/+ipxlVZIs+Y83KsgNbL3g7R83r6zw==
+  dependencies:
+    fast-plist "^0.1.2"
+    plist "^3.0.1"
+    xcode "^2.0.0"
 
 react-native-gesture-handler@~1.6.0:
   version "1.6.1"
